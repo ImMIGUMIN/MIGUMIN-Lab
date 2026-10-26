@@ -4,15 +4,13 @@
 > **案例来源**：用户提供的短视频截图与作者评论截图（账号显示为「葡萄_好吃吗」）。  
 > **图示说明**：`reference_*.png` 是原始截图或从原始截图裁切的局部；`diagram_*.png` 与 `animation_*.gif` 是为理解原理绘制的教学示意，不是作者工程的截图，也不能用来证明作者具体建模方式。
 
-> **图片资源说明（待上传）**：本页正文已经发布，但由于当前 GitHub 连接无法直接上传本地 PNG/GIF 二进制资源，`./images/` 中的截图、示意图和动图暂未同步，页面内的图片将暂时无法显示。请使用本次对话提供的完整 ZIP 获取图文版本。将 ZIP 中 `images/` 文件夹复制到仓库 `Unity/images/` 后，页面的相对路径即可恢复。
-
 ## 0. 先看参考图片与作者回复
 
-![原参考：初始与拉下状态对照](./images/reference_side_by_side.png)
+![原参考：初始与拉下状态对照](./images/blendshape-stocking/reference_side_by_side.png)
 
 **图 0-1**：左侧为正常穿着状态，右侧为被拖动后、袜口局部降低且倾斜的状态。两张图分别来源于用户上传的截图。
 
-![作者关于 BlendShape 的回复](./images/reference_author_reply.png)
+![作者关于 BlendShape 的回复](./images/blendshape-stocking/reference_author_reply.png)
 
 **图 0-2**：评论中有人问是否用 Shader 实现顶点动画；作者答复大意是：**采用 BlendShape，根据鼠标位置混合，没有使用专门实现这一变形的 Shader。**
 
@@ -35,7 +33,7 @@
 
 一个直观的复刻方案是让大腿和袜子具有**可独立控制的几何表面**。丝袜网格围绕腿部网格，并比皮肤略微外移，以免两层表面争夺同一空间。
 
-![皮肤和丝袜两套几何表面示意](./images/diagram_mesh_layering.png)
+![皮肤和丝袜两套几何表面示意](./images/blendshape-stocking/diagram_mesh_layering.png)
 
 **图 1-1**：二维截面示意。左侧展示正常的内外层关系；右侧展示局部变形后潜在的交叉风险。间隙为便于观察而放大。
 
@@ -80,7 +78,7 @@ Blender 里常称 **Shape Key**，Unity 里常称 **BlendShape**。示例：
 - `Pull_Right`：右侧袜口向下倾斜、略微外翻的目标形状；
 - `Pull_Left`：如果需要左右自由拖动，可制作另一个目标形状。
 
-![不同权重对应的形状](./images/diagram_blendshape_targets.png)
+![不同权重对应的形状](./images/blendshape-stocking/diagram_blendshape_targets.png)
 
 **图 2-1**：0% / 50% / 100% 的插值状态。图中形状是教学重绘，并非原视频的实际网格。
 
@@ -142,7 +140,7 @@ t=\mathrm{Clamp01}\left(\frac{\Delta y}{200}\right)
 | 150 px | 0.75 | 75 |
 | 200 px 及以上 | 1 | 100 |
 
-![鼠标移动距离和袜口状态](./images/diagram_mouse_drag_states.png)
+![鼠标移动距离和袜口状态](./images/blendshape-stocking/diagram_mouse_drag_states.png)
 
 **图 3-1**：对应先前的交互滑块示意，用 0、80、200 px 三种位置展示实时权重与袜口形状变化。Markdown 中展示静态快照。
 
@@ -150,13 +148,13 @@ t=\mathrm{Clamp01}\left(\frac{\Delta y}{200}\right)
 
 Unity 根据 BlendShape 权重，混合 Basis 和目标顶点位置。**这两层插值不是一回事**：前者是输入映射，后者是几何形状的插值。
 
-![两层插值的数学曲线](./images/diagram_two_interpolations.png)
+![两层插值的数学曲线](./images/blendshape-stocking/diagram_two_interpolations.png)
 
 **图 3-2**：左侧是鼠标距离至百分比权重的线性映射；右侧是单个顶点的 Y 位置随权重变化的线性插值示例。
 
 ### GIF：模拟从 0% 拉到 100%，再反向恢复
 
-![BlendShape 权重动态示意](./images/animation_blendshape_weight.gif)
+![BlendShape 权重动态示意](./images/blendshape-stocking/animation_blendshape_weight.gif)
 
 **图 3-3**：重新制作的演示 GIF。它模拟鼠标拖拽控制 BlendShape 权重，**不是原视频的逐帧提取，也不是 Unity 运行结果**。
 
@@ -181,7 +179,7 @@ t_{\mathrm{right}}=t_{\mathrm{pull}}\cdot\mathrm{Clamp01}(u),\qquad
 
 ## 4. 完整运行过程
 
-![Unity 输入到网格更新的过程](./images/diagram_control_pipeline.png)
+![Unity 输入到网格更新的过程](./images/blendshape-stocking/diagram_control_pipeline.png)
 
 **图 4-1**：鼠标事件决定权重，Unity 系统负责 Mesh 变形插值。
 
@@ -406,10 +404,10 @@ BlendShape 只知道“把一批顶点推向目标形状”，**它本身不会�
 
 两张用户截图在 `./images/` 中完整保留，方便之后回到原始资料核对细节。
 
-- [原截图 1：正常袜口](./images/reference_original_normal.png)
-- [原截图 2：变形状态与作者评论](./images/reference_original_dragged_comment.png)
-- [裁切的正常状态](./images/reference_normal_detail.png)
-- [裁切的变形状态](./images/reference_dragged_detail.png)
+- [原截图 1：正常袜口](./images/blendshape-stocking/reference_original_normal.png)
+- [原截图 2：变形状态与作者评论](./images/blendshape-stocking/reference_original_dragged_comment.png)
+- [裁切的正常状态](./images/blendshape-stocking/reference_normal_detail.png)
+- [裁切的变形状态](./images/blendshape-stocking/reference_dragged_detail.png)
 
 **文件夹结构**：
 
