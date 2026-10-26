@@ -27,7 +27,7 @@
 | Column | Area | Articles |
 | --- | --- | ---: |
 | [UNITY](#unity) | Rendering / UI / NPR / PBR / Materials / Weather / Modeling / Water / Pipeline | 10 |
-| [BLENDER](#blender) | Toon Shading / NPR / Water Shader | 2 |
+| [BLENDER](#blender) | Toon Shading / NPR / Hair Shader / Water Shader | 3 |
 | [AE](#ae) | Motion / Wallpaper | 1 |
 
 ---
@@ -79,6 +79,9 @@
 - [三渲二二分阴影与头发高光](./Blender/Blender-Toon-Shading-Notes.md)  
   这篇是我在 Blender 里拆最基础的三渲二节点时整理出来的。最开始最容易混在一起的是“到底是谁在判断亮暗、谁在切二分、为什么明明没有进阴影头发还是会变深”。一路把 Diffuse BSDF、Shader to RGB、ColorRamp、Lit / Shadow Tint 和 Emission 分开以后，终于把这套逻辑理清了：Diffuse BSDF 负责算受光，Shader to RGB 把结果拿出来，ColorRamp 只负责按阈值分区，真正的亮部和暗部颜色则是后面自己设计的；所以亮部完全可以故意压成浅蓝灰，再给高光留空间。也顺便把 Hair Highlight 和物理 Anisotropic 的关系理顺了——二次元发丝高光会借用方向性原理，但最终形状通常会被进一步艺术化。
 
+- [二次元头发：发束、法线、渐变 Base Color 与 Toon Shading](./Blender/Anime-Hair-Geometry-Color-Toon-Shading.md)  
+  这篇是我看到一个白紫色头发的 Blender 模型以后，顺着“没有明显描边，为什么发束还是一缕一缕”和“颜色到底来自 Base Color 还是受光 Shader”两个问题整理的。发束感并不是因为拓扑边被画了出来，而是 Mesh 轮廓、法线、贴图和遮挡一起形成的。至于白到蓝紫的过渡，我最初考虑了渐变 Base Color，后来又想到原发色可能偏蓝紫，只是 NPR 把受光面映射成银白；这两种路线都能成立。没有工程文件就不能断言作者用了什么，因此我把 Eevee 的 Toon 节点、Generated Z / UV 渐变和排查思路都留下来了，配上原截图和节点示意图。
+
 - [水面涟漪 Shader：从圆环动画到高度图与法线图](./Blender/Water-Ripple-Shader-Notes.md)  
   这篇是我在研究“水滴落下以后那一圈圈波纹到底怎么做”时整理出来的。刚开始很容易把颜色波纹、Height Map 和 Normal Map 当成差不多的东西，也会下意识觉得看起来有凹凸就说明水面真的变形了。一步步拆开以后才理清：Distance 负责生成圆，Time 让圆环向外扩散，Height 只是记录想象中的高低，而 Normal 才是在告诉光照系统表面朝哪个方向倾斜。也因此终于能分清“只是把波纹画出来”和“让波纹真正影响高光、反射、折射”之间的区别；如果还要改变水面的真实轮廓，则必须继续走到顶点位移或其他几何变形。
 
@@ -116,7 +119,9 @@ MIGUMIN-Lab/
 │   └── Real-Time-Rendering-and-Rendering-Pipeline.md
 ├── Blender/
 │   ├── Blender-Toon-Shading-Notes.md
-│   └── Water-Ripple-Shader-Notes.md
+│   ├── Anime-Hair-Geometry-Color-Toon-Shading.md
+│   ├── Water-Ripple-Shader-Notes.md
+│   └── images/Anime-Hair-Shader/ (8 images)
 └── AE/
     └── Wallpaper-Engine-Production.md
 ```
