@@ -26,7 +26,7 @@
 
 | Column | Area | Articles |
 | --- | --- | ---: |
-| [UNITY](#unity) | Rendering / UI / NPR / PBR / Materials / Weather / Modeling / Water / Pipeline | 10 |
+| [UNITY](#unity) | Rendering / UI / NPR / PBR / Materials / Weather / Modeling / Water / Pipeline | 11 |
 | [BLENDER](#blender) | Toon Shading / NPR / Hair Shader / Water Shader | 3 |
 | [AE](#ae) | Motion / Wallpaper | 1 |
 
@@ -37,6 +37,10 @@
 ## UNITY
 
 ### Rendering / UI
+
+- [BlendShape 可拖拽过膝袜：网格变形、鼠标控制与插值](./Unity/BlendShape-Stocking-Mesh-Deformation.md)  
+  从袜口拖拽案例理解 BlendShape、Shape Key、Skinning、鼠标距离映射、顶点插值和防穿模，包含 C# 示例与复刻步骤。
+
 
 - [CanvasGroup 与透明渲染](./Unity/CanvasGroup-Alpha-Rendering.md)  
   这篇是我在研究角色淡出时整理出来的。原本只是觉得“把所有图层一起调透明就行”，后来才发现多层图片会互相透出来、叠色。最后把一个问题理清了：多层 UI / 角色图一起淡出时，问题不只是透明度本身，还和图层顺序、混合方式以及渲染流程有关，所以有时候应该用 Dissolve、Dither Fade 或 RenderTexture，而不是单纯把 Alpha 一起往下拉。
@@ -107,6 +111,7 @@ MIGUMIN-Lab/
 ├── README.md
 ├── assets/
 ├── Unity/
+│   ├── BlendShape-Stocking-Mesh-Deformation.md
 │   ├── CanvasGroup-Alpha-Rendering.md
 │   ├── Endfield-3D-Toon-Rendering-and-Shader.md
 │   ├── Reflective-Floor-Shader-Reflection-Roughness-Bump.md
